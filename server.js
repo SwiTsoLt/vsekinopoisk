@@ -1,7 +1,8 @@
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 const config = require('config');
-const { getRows } = require("./googleAuth")
+const { getRows } = require("./my_modules/googleAuth")
+const { getAnalytics } = require("./my_modules/analytics")
 
 const app = express()
 const PORT = process.env.PORT || config.get("PORT")
@@ -15,6 +16,7 @@ const regularOptions = {
 }
 
 async function start() {
+
     try {
         bot.onText(regularOptions.start, message => {
             greeting(message)
@@ -100,4 +102,8 @@ app.get("/", (req, res) => {
     res.end()
 })
 
-app.listen(PORT, () => console.log(`Server start on port ${PORT}`))
+
+
+app.listen(PORT, async () => {
+    console.log(console.log(`Server start on port ${PORT}`));
+})

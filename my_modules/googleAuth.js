@@ -39,4 +39,4 @@ async function getRows({ range }) {
     return rows
 }
 
-module.exports = { getClient, getSheets, getMetaData, getRows }
+module.exports = { auth, getClient, getSheets, getMetaData, getRows }
