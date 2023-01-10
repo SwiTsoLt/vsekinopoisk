@@ -60,7 +60,7 @@ function greeting(message) {
 }
 
 function help(message) {
-    bot.sendMessage(message.chat.id, "Я умею отправлять названия фильмов/сериалов. Просто введите код фильма/сериала, например \"123\"")
+    bot.sendMessage(message.chat.id, "Я умею отправлять названия фильмов/сериалов. Просто введите код фильма/сериала, например \"1\"")
 }
 
 start()
