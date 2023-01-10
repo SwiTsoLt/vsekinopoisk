@@ -1,10 +1,12 @@
+const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 const config = require('config');
 const { getRows } = require("./googleAuth")
 
+const app = express()
+const PORT = process.env.PORT || config.get("PORT")
 const TOKEN = process.env.TOKEN || config.get("TOKEN")
 const bot = new TelegramBot(TOKEN, { polling: true });
-
 
 const regularOptions = {
     start: /\/start/,
@@ -75,3 +77,11 @@ function formatResponse(response) {
         return { ...acc, [cur[0]]:cur[1] }
     }, {})
 }
+
+// EXPRESS
+
+app.get("/", (req, res) => {
+    res.end()
+})
+
+app.listen(PORT, () => console.log(`Server start on port ${PORT}`))
