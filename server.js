@@ -56,6 +56,7 @@ async function start() {
 
 function greeting(message) {
     bot.sendMessage(message.chat.id, `Привет, ${message.from.first_name}!`)
+    bot.sendMessage(message.chat.id, "Введите код фильма/сериала, например \"1\"")
 }
 
 function help(message) {
