@@ -28,7 +28,7 @@ async function sendUserAnalytic(message) {
         await (await getSheets()).spreadsheets.values.append({
             auth,
             spreadsheetId,
-            range: "analytics!A:G",
+            range: "analytics!A:H",
             valueInputOption: "USER_ENTERED",
             resource: {
                 values: [
@@ -38,8 +38,9 @@ async function sendUserAnalytic(message) {
                         message.from.first_name,
                         message.from.last_name,
                         userExits ? Number(data[message.from.id]["search_count"]) + 1 : 1,
-                        userExits ? `${data[message.from.id]["search_data"]}, ${message.text}` : message.text,
-                        0
+                        message.text,
+                        0,
+                        getToday()
                     ]
                 ]
             }
@@ -76,5 +77,11 @@ function formatAnalyticsReponse(response) {
         return { ...acc, ...createUser(data, index) }
     }, {})
 }
+
+function getToday() {
+    const today = new Date().toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour: "2-digit", minute: "2-digit"}) 
+    return today
+}
+
 
 module.exports = { getAnalytics, sendUserAnalytic }
