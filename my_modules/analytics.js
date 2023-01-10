@@ -29,6 +29,7 @@ async function sendUserAnalytic(message) {
             auth,
             spreadsheetId,
             range: "analytics!A:G",
+            valueInputOption: "USER_ENTERED",
             resource: {
                 values: [
                     [
