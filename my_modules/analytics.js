@@ -23,6 +23,8 @@ async function sendUserAnalytic(message) {
         const response = await getAnalytics()
         const data = formatAnalyticsReponse(response)
 
+        const userExits = data[message.from.id]
+
         await (await getSheets()).spreadsheets.values.appen({
             auth,
             spreadsheetId,
@@ -34,8 +36,8 @@ async function sendUserAnalytic(message) {
                         message.from.username,
                         message.from.first_name,
                         message.from.last_name,
-                        Number(data[message.from.id]["search_count"]) + 1,
-                        `${data[message.from.id]["search_data"], message.text}`,
+                        userExits ? Number(data[message.from.id]["search_count"]) + 1 : 1,
+                        userExits ? `${data[message.from.id]["search_data"], message.text}` : message.text,
                         0
                     ]
                 ]
