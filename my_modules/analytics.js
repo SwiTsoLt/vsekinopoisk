@@ -38,7 +38,7 @@ async function sendUserAnalytic(message) {
                         message.from.first_name,
                         message.from.last_name,
                         userExits ? Number(data[message.from.id]["search_count"]) + 1 : 1,
-                        userExits ? `${data[message.from.id]["search_data"], message.text}` : message.text,
+                        userExits ? `${data[message.from.id]["search_data"]}, ${message.text}` : message.text,
                         0
                     ]
                 ]
