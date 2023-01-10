@@ -15,43 +15,54 @@ const regularOptions = {
 }
 
 async function start() {
-    bot.onText(regularOptions.start, message => {
-        greeting(message)
-    })
+    try {
+        bot.onText(regularOptions.start, message => {
+            greeting(message)
+        })
 
-    bot.onText(regularOptions.code, async message => {
-        const isSubscribe = checkSubscribe()
+        bot.onText(regularOptions.code, async message => {
+            try {
+                bot.sendMessage(message.chat.id, "Загружаю фильм...")
 
-        if (isSubscribe) {
-            const response = await getRows({ range: "data" })
-            const data = formatResponse(response)
-            if (data[message.text]) {
-                bot.sendMessage(message.chat.id, data[message.text])
-            } else {
-                bot.sendMessage(message.chat.id, `Фильм/Сериал по коду '${message.text}' не найден.`)
+                const isSubscribe = checkSubscribe(message)
+
+                if (isSubscribe) {
+                    const response = await getRows({ range: "data" })
+                    bot.deleteMessage(message.chat.id, message.message_id)
+                    const data = formatResponse(response)
+                    if (data[message.text]) {
+                        bot.sendMessage(message.chat.id, data[message.text])
+                    } else {
+                        bot.sendMessage(message.chat.id, `Фильм/Сериал по коду '${message.text}' не найден.`)
+                    }
+                } else {
+                    bot.sendMessage(message.chat.id, "Чтобы бот работал ван нужно подписаться на каналы:")
+                }
+            } catch (e) {
+                console.log(e);
+                bot.sendMessage(message.chat.id, "Что-то пошло не так")
             }
-            
-        } else {
-            bot.sendMessage(message.chat.id, "Чтобы бот работал ван нужно подписаться на каналы:")
-        }
-    })
+        })
 
-    bot.onText(regularOptions.help, message => {
-        help(message)
-    })
+        bot.onText(regularOptions.help, message => {
+            help(message)
+        })
 
-    bot.on("message", message => {
-        let notFound = 0
+        bot.on("message", message => {
+            let notFound = 0
 
-        for (key in regularOptions) {
-            notFound += !regularOptions[key].test(message.text) ? 1 : 0
-        }
+            for (key in regularOptions) {
+                notFound += !regularOptions[key].test(message.text) ? 1 : 0
+            }
 
-        if (notFound >= Object.keys(regularOptions).length) {
-            console.log(message.text);
-            bot.sendMessage(message.chat.id, "Простите, я вас не понимаю.\nВведите /help чтобы узнать, что я умею.", { parse_mode: "HTML" })
-        }
-    })
+            if (notFound >= Object.keys(regularOptions).length) {
+                console.log(message.text);
+                bot.sendMessage(message.chat.id, "Простите, я вас не понимаю.\nВведите /help чтобы узнать, что я умею.", { parse_mode: "HTML" })
+            }
+        })
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function greeting(message) {
@@ -65,8 +76,12 @@ function help(message) {
 
 start()
 
-function checkSubscribe() {
-    return true
+function checkSubscribe(message) {
+    if (true) {
+        return true
+    }
+
+    bot.deleteMessage(message.chat.id, message.message_id)
 }
 
 function formatResponse(response) {
@@ -75,7 +90,7 @@ function formatResponse(response) {
             return acc
         }
 
-        return { ...acc, [cur[0]]:cur[1] }
+        return { ...acc, [cur[0]]: cur[1] }
     }, {})
 }
 
