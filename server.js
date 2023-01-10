@@ -22,13 +22,13 @@ async function start() {
 
         bot.onText(regularOptions.code, async message => {
             try {
-                bot.sendMessage(message.chat.id, "Загружаю фильм...")
+                const loadingMessage = await bot.sendMessage(message.chat.id, "Загружаю фильм...")
 
-                const isSubscribe = checkSubscribe(message)
+                const isSubscribe = checkSubscribe(message, loadingMessage)
 
                 if (isSubscribe) {
                     const response = await getRows({ range: "data" })
-                    bot.deleteMessage(message.chat.id, message.message_id)
+                    bot.deleteMessage(message.chat.id, loadingMessage.message_id)
                     const data = formatResponse(response)
                     if (data[message.text]) {
                         bot.sendMessage(message.chat.id, data[message.text])
@@ -76,12 +76,12 @@ function help(message) {
 
 start()
 
-function checkSubscribe(message) {
+function checkSubscribe(message, loadingMessage) {
     if (true) {
         return true
     }
 
-    bot.deleteMessage(message.chat.id, message.message_id)
+    bot.deleteMessage(message.chat.id, loadingMessage.message_id)
 }
 
 function formatResponse(response) {
