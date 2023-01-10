@@ -25,7 +25,7 @@ async function sendUserAnalytic(message) {
 
         const userExits = data[message.from.id]
 
-        await (await getSheets()).spreadsheets.values.appen({
+        await (await getSheets()).spreadsheets.values.append({
             auth,
             spreadsheetId,
             range: "analytics!A:G",
