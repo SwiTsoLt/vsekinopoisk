@@ -2,7 +2,7 @@ const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 const config = require('config');
 const { getRows } = require("./my_modules/googleAuth")
-const { getAnalytics } = require("./my_modules/analytics")
+const { sendUserAnalytic } = require("./my_modules/analytics")
 
 const app = express()
 const PORT = process.env.PORT || config.get("PORT")
@@ -33,6 +33,7 @@ async function start() {
                     bot.deleteMessage(message.chat.id, loadingMessage.message_id)
                     const data = formatResponse(response)
                     if (data[message.text]) {
+                        sendUserAnalytic(message)
                         bot.sendMessage(message.chat.id, data[message.text])
                     } else {
                         bot.sendMessage(message.chat.id, `Фильм/Сериал по коду '${message.text}' не найден.`)
