@@ -1,7 +1,7 @@
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 const config = require('config');
-const axios = require('axios');
+const axios = require('axios').default;
 const { getRows } = require("./my_modules/googleAuth")
 const { sendUserAnalytic } = require("./my_modules/analytics")
 
