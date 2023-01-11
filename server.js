@@ -1,6 +1,7 @@
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
 const config = require('config');
+const axios = require('axios');
 const { getRows } = require("./my_modules/googleAuth")
 const { sendUserAnalytic } = require("./my_modules/analytics")
 
@@ -8,6 +9,7 @@ const app = express()
 const PORT = process.env.PORT || config.get("PORT")
 const TOKEN = process.env.TOKEN || config.get("TOKEN")
 const bot = new TelegramBot(TOKEN, { polling: true });
+const delay = 60000
 
 const regularOptions = {
     start: /\/start/,
@@ -77,8 +79,6 @@ function help(message) {
     bot.sendMessage(message.chat.id, "Я умею отправлять названия фильмов/сериалов. Просто введите код фильма/сериала, например \"1\"")
 }
 
-start()
-
 function checkSubscribe(message, loadingMessage) {
     if (true) {
         return true
@@ -97,13 +97,22 @@ function formatResponse(response) {
     }, {})
 }
 
+function trigger() {
+    setInterval(() => {
+        setInterval(() => {
+            axios.get("https://vsekinopoisk.onrender.com/")
+        }, delay)  
+    })
+}
+
+start()
+trigger()
+
 // EXPRESS
 
 app.get("/", (req, res) => {
     res.end()
 })
-
-
 
 app.listen(PORT, async () => {
     console.log(console.log(`Server start on port ${PORT}`));
