@@ -80,7 +80,7 @@ function formatAnalyticsReponse(response) {
 
 function getToday() {
     const locale = "en-US"
-    const options = { timeZone: "Asia/Shanghai", weekday:"long", year:"numeric", month:"short", day:"numeric", hour: "2-digit", minute: "2-digit"}
+    const options = { timeZone: "Africa/Nairobi", weekday:"long", year:"numeric", month:"short", day:"numeric", hour: "2-digit", minute: "2-digit"}
     const today = new Date().toLocaleDateString(locale, options) 
     return today
 }
