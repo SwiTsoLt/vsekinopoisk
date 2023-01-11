@@ -99,10 +99,10 @@ function formatResponse(response) {
 
 function trigger() {
     setInterval(() => {
-        setInterval(() => {
             axios.get("https://vsekinopoisk-trigger.onrender.com/")
         }, delay)  
-    })
+
+
 }
 
 start()
