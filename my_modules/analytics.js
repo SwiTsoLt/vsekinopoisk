@@ -79,8 +79,8 @@ function formatAnalyticsReponse(response) {
 }
 
 function getToday() {
-    const locale = "ru-RU"
-    const options = { weekday:"long", year:"numeric", month:"short", day:"numeric", hour: "2-digit", minute: "2-digit"}
+    const locale = "en-US"
+    const options = { timeZone: "Asia/Kolkata", weekday:"long", year:"numeric", month:"short", day:"numeric", hour: "2-digit", minute: "2-digit"}
     const today = new Date().toLocaleDateString(locale, options) 
     return today
 }
