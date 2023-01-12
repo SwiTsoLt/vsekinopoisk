@@ -9,7 +9,7 @@ const app = express()
 const PORT = process.env.PORT || config.get("PORT")
 const TOKEN = process.env.TOKEN || config.get("TOKEN")
 const bot = new TelegramBot(TOKEN, { polling: true });
-const delay = 60000
+const delay = 600000
 
 const regularOptions = {
     start: /\/start/,
@@ -97,10 +97,14 @@ function formatResponse(response) {
     }, {})
 }
 
-function trigger() {
-    setInterval(() => {
-            axios.get("https://vsekinopoisk-trigger.onrender.com/")
-        }, delay)  
+async function trigger() {
+    setTimeout(() => {
+        await axios.get("https://vsekinopoisk-trigger.onrender.com/")
+        trigger()
+    }, delay)
+
+
+
 
 
 }
@@ -116,4 +120,7 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, async () => {
     console.log(console.log(`Server start on port ${PORT}`));
+
+    
+
 })
