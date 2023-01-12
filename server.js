@@ -99,7 +99,8 @@ function formatResponse(response) {
 
 function trigger() {
     setTimeout(async () => {
-        await axios.get("https://vsekinopoisk-trigger.onrender.com/")
+        const response = await axios.get("https://vsekinopoisk-trigger.onrender.com/")
+        console.log(response.status)
         trigger()
     }, delay)
 
