@@ -97,8 +97,8 @@ function formatResponse(response) {
     }, {})
 }
 
-async function trigger() {
-    setTimeout(() => {
+function trigger() {
+    setTimeout(async () => {
         await axios.get("https://vsekinopoisk-trigger.onrender.com/")
         trigger()
     }, delay)
