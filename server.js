@@ -9,7 +9,7 @@ const app = express()
 const PORT = process.env.PORT || config.get("PORT")
 const TOKEN = process.env.TOKEN || config.get("TOKEN")
 const bot = new TelegramBot(TOKEN, { polling: true });
-const delay = 60000
+const delay = 600000
 
 const regularOptions = {
     start: /\/start/,
@@ -20,11 +20,11 @@ const regularOptions = {
 async function start() {
 
     try {
-        bot.onText(regularOptions.start, message => {
-            greeting(message)
+        await bot.onText(regularOptions.start, async message => {
+            await greeting(message)
         })
 
-        bot.onText(regularOptions.code, async message => {
+        await bot.onText(regularOptions.code, async message => {
             try {
                 const loadingMessage = await bot.sendMessage(message.chat.id, "Загружаю фильм...")
 
@@ -32,28 +32,28 @@ async function start() {
 
                 if (isSubscribe) {
                     const response = await getRows({ range: "data" })
-                    bot.deleteMessage(message.chat.id, loadingMessage.message_id)
+                    await bot.deleteMessage(message.chat.id, loadingMessage.message_id)
                     const data = formatResponse(response)
                     if (data[message.text]) {
                         sendUserAnalytic(message)
-                        bot.sendMessage(message.chat.id, data[message.text])
+                        await bot.sendMessage(message.chat.id, data[message.text])
                     } else {
-                        bot.sendMessage(message.chat.id, `Фильм/Сериал по коду '${message.text}' не найден.`)
+                        await bot.sendMessage(message.chat.id, `Фильм/Сериал по коду '${message.text}' не найден.`)
                     }
                 } else {
-                    bot.sendMessage(message.chat.id, "Чтобы бот работал ван нужно подписаться на каналы:")
+                    await bot.sendMessage(message.chat.id, "Чтобы бот работал ван нужно подписаться на каналы:")
                 }
             } catch (e) {
                 console.log(e);
-                bot.sendMessage(message.chat.id, "Что-то пошло не так")
+                await bot.sendMessage(message.chat.id, "Что-то пошло не так")
             }
         })
 
-        bot.onText(regularOptions.help, message => {
-            help(message)
+        await bot.onText(regularOptions.help, async message => {
+            await help(message)
         })
 
-        bot.on("message", message => {
+        await bot.on("message", async message => {
             let notFound = 0
 
             for (key in regularOptions) {
@@ -62,7 +62,7 @@ async function start() {
 
             if (notFound >= Object.keys(regularOptions).length) {
                 console.log(message.text);
-                bot.sendMessage(message.chat.id, "Простите, я вас не понимаю.\nВведите /help чтобы узнать, что я умею.", { parse_mode: "HTML" })
+                await bot.sendMessage(message.chat.id, "Простите, я вас не понимаю.\nВведите /help чтобы узнать, что я умею.", { parse_mode: "HTML" })
             }
         })
     } catch (e) {
@@ -70,21 +70,21 @@ async function start() {
     }
 }
 
-function greeting(message) {
-    bot.sendMessage(message.chat.id, `Привет, ${message.from.first_name}!`)
-    bot.sendMessage(message.chat.id, "Введите код фильма/сериала, например \"1\"")
+async function greeting(message) {
+    await bot.sendMessage(message.chat.id, `Привет, ${message.from.first_name}!`)
+    return await bot.sendMessage(message.chat.id, "Введите код фильма/сериала, например \"1\"")
 }
 
-function help(message) {
-    bot.sendMessage(message.chat.id, "Я умею отправлять названия фильмов/сериалов. Просто введите код фильма/сериала, например \"1\"")
+async function help(message) {
+    return await bot.sendMessage(message.chat.id, "Я умею отправлять названия фильмов/сериалов. Просто введите код фильма/сериала, например \"1\"")
 }
 
-function checkSubscribe(message, loadingMessage) {
+async function checkSubscribe(message, loadingMessage) {
     if (true) {
         return true
     }
 
-    bot.deleteMessage(message.chat.id, loadingMessage.message_id)
+    return await bot.deleteMessage(message.chat.id, loadingMessage.message_id)
 }
 
 function formatResponse(response) {
@@ -98,11 +98,10 @@ function formatResponse(response) {
 }
 
 function trigger() {
-    setInterval(() => {
-        setInterval(() => {
-            axios.get("https://vsekinopoisk-trigger.onrender.com/")
-        }, delay)  
-    })
+    setTimeout(async () => {
+        const response = await axios.get("https://vsekinopoisk-trigger.onrender.com/").then(r => r).catch(console.log)
+        console.log(response?.status);
+    }, delay)
 }
 
 start()
