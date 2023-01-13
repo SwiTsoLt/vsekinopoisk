@@ -7,7 +7,7 @@ const { sendUserAnalytic } = require("./my_modules/analytics")
 
 const app = express()
 const PORT = process.env.PORT || config.get("PORT")
-const TOKEN = process.env.TOKEN || config.get("TOKEN")
+const TOKEN = process.env.TOKEN || "" 
 const bot = new TelegramBot(TOKEN, { polling: true });
 const delay = 600000
 
@@ -115,4 +115,7 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, async () => {
     console.log(console.log(`Server start on port ${PORT}`));
+
+    
+
 })
