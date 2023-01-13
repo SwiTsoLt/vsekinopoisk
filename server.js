@@ -101,6 +101,7 @@ function trigger() {
     setTimeout(async () => {
         const response = await axios.get("https://vsekinopoisk-trigger.onrender.com/").then(r => r).catch(console.log)
         console.log(response?.status);
+        trigger()
     }, delay)
 }
 
