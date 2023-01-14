@@ -17,6 +17,9 @@ const regularOptions = {
     help: /\/help/
 }
 
+const smileList = ['🍿', '🎥'] 
+let smileId = 0
+
 async function start() {
 
     try {
@@ -36,7 +39,9 @@ async function start() {
                     const data = formatResponse(response)
                     if (data[message.text]) {
                         sendUserAnalytic(message)
-                        await bot.sendMessage(message.chat.id, data[message.text])
+    
+                        await bot.sendMessage(message.chat.id, `${smileList[smileId]} ${data[message.text]}`)
+                        smileId = smileId === 0 ? 1 : 0
                     } else {
                         await bot.sendMessage(message.chat.id, `Фильм/Сериал по коду '${message.text}' не найден.`)
                     }
